@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f2ec">
+  <meta name="description" content="时痕，记录风景、人文、星空与日常之间，光留下的痕迹。">
+  <title>时痕 | 摄影作品集</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --paper: #19211e;
+      --ink: #edf1ed;
+      --muted: #a5b0aa;
+      --line: #3b4841;
+      --accent: #d17a56;
+      --green: #a7c0ae;
+      --serif: "Noto Serif SC", "Songti SC", serif;
+      --sans: "DM Sans", "Microsoft YaHei", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background-color: #141a18;
+      background-image: linear-gradient(rgb(15 21 19 / 52%), rgb(15 21 19 / 64%)), url("https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1800&q=80");
+      background-size: cover, cover;
+      background-position: center, center;
+      background-attachment: fixed, fixed;
+      background-repeat: no-repeat;
+      color: var(--ink);
+      font-family: var(--sans);
+    }
+    button { color: inherit; font: inherit; }
+    .page-shell { width: min(1440px, 100% - 112px); margin-inline: auto; }
+
+    .topbar {
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+    .wordmark { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); }
+    .wordmark-symbol { width: 27px; height: 27px; border: 1px solid var(--accent); border-radius: 50%; display: grid; place-items: center; color: var(--accent); font: 16px var(--serif); }
+    .wordmark-name { font: 600 19px var(--serif); letter-spacing: 3px; }
+    .top-note { color: var(--muted); font-size: 12px; letter-spacing: 1.3px; }
+    .top-link { color: var(--ink); text-decoration: none; font-size: 12px; border-bottom: 1px solid var(--accent); padding-bottom: 5px; }
+    .top-actions { display: flex; align-items: center; gap: 17px; }
+    .auth-trigger, .logout-button { border: 0; border-bottom: 1px solid var(--accent); padding: 0 0 5px; background: transparent; color: var(--ink); font-size: 12px; cursor: pointer; }
+    .account-view { display: flex; align-items: center; gap: 9px; }
+    .account-view[hidden], .auth-trigger[hidden] { display: none; }
+    .account-avatar { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 50%; background: var(--green); color: white; font: 13px var(--serif); }
+    .account-name { max-width: 96px; overflow: hidden; color: var(--muted); font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+
+    .hero { display: grid; grid-template-columns: 0.86fr 1.14fr; gap: 6.5%; align-items: center; padding: 58px 0 68px; }
+    .hero-copy { padding: 15px 0 15px 2px; animation: enter 650ms both; }
+    .eyebrow { display: flex; align-items: center; gap: 11px; color: var(--accent); font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 27px; height: 1px; background: currentColor; }
+    h1 { margin: 25px 0 13px; font: 500 clamp(58px, 7.2vw, 100px)/1.14 var(--serif); letter-spacing: 7px; }
+    .hero-subtitle { margin: 0; color: var(--green); font: 400 clamp(19px, 2vw, 26px)/1.7 var(--serif); }
+    .hero-description { max-width: 350px; margin: 20px 0 30px; color: var(--muted); font-size: 13px; line-height: 2; }
+    .hero-meta { display: flex; align-items: center; gap: 17px; color: var(--muted); font-size: 11px; letter-spacing: 1px; }
+    .meta-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+    .hero-image-wrap { position: relative; min-width: 0; animation: enter 750ms 100ms both; }
+    .hero-image { display: block; width: 100%; height: clamp(340px, 39vw, 520px); object-fit: cover; object-position: center 55%; }
+    .image-index { position: absolute; right: -14px; bottom: -15px; padding: 12px 17px; background: var(--accent); color: white; font-size: 11px; letter-spacing: 1px; }
+    .image-caption { position: absolute; left: 15px; bottom: 14px; padding: 6px 9px; background: rgb(20 24 21 / 54%); color: white; font-size: 10px; letter-spacing: 1px; }
+
+    .gallery-section { border-top: 1px solid var(--line); padding: 44px 0 82px; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 25px; }
+    .section-kicker { margin: 0 0 9px; color: var(--accent); font-size: 10px; letter-spacing: 2px; }
+    h2 { margin: 0; font: 500 28px var(--serif); letter-spacing: 2px; }
+    .photo-count { color: var(--muted); font-size: 11px; }
+    .filters { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 29px; }
+    .filter-button { min-height: 36px; border: 1px solid transparent; border-radius: 2px; padding: 0 15px; background: transparent; color: var(--muted); font-size: 12px; cursor: pointer; transition: color 160ms, background 160ms, border-color 160ms; }
+    .filter-button:hover { color: var(--ink); border-color: var(--line); }
+    .filter-button[aria-pressed="true"] { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+    .gallery { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 38px 20px; }
+    .photo-card { min-width: 0; cursor: pointer; animation: enter 450ms both; }
+    .photo-card[hidden] { display: none; }
+    .photo-frame { position: relative; overflow: hidden; aspect-ratio: 4 / 3; background: #2b3530; }
+    .photo-frame img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 450ms cubic-bezier(.2,.65,.3,1); }
+    .photo-card:hover .photo-frame img { transform: scale(1.035); }
+    .photo-number { position: absolute; left: 11px; top: 11px; padding: 5px 7px; background: rgb(244 242 236 / 90%); color: var(--ink); font-size: 10px; letter-spacing: 1px; }
+    .photo-info { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding-top: 12px; }
+    .photo-title { margin: 0; font: 500 15px var(--serif); }
+    .photo-category { flex: none; color: var(--muted); font-size: 10px; }
+    .photo-place { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
+    .empty-state { display: none; padding: 60px 0; color: var(--muted); text-align: center; font: 16px var(--serif); }
+    .empty-state.visible { display: block; }
+
+    .footer { border-top: 1px solid var(--line); padding: 24px 0 35px; display: flex; justify-content: space-between; gap: 20px; color: var(--muted); font-size: 10px; letter-spacing: .6px; }
+
+    .community-section { border-top: 1px solid var(--line); padding: 55px 0 78px; }
+    .community-heading { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 25px; }
+    .community-heading p { max-width: 540px; margin: 10px 0 0; color: var(--muted); font-size: 12px; line-height: 1.8; }
+    .community-heading h2 { font-size: 32px; }
+    .publish-button { flex: none; min-height: 42px; border: 1px solid var(--accent); border-radius: 2px; padding: 0 17px; background: var(--accent); color: white; font-size: 12px; cursor: pointer; }
+    .publish-button:hover { background: #9e422e; }
+    .community-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; border-bottom: 1px solid var(--line); margin-bottom: 22px; }
+    .community-filters { display: flex; gap: 5px; flex-wrap: wrap; }
+    .community-filter { min-height: 36px; border: 0; border-bottom: 2px solid transparent; padding: 0 12px; background: transparent; color: var(--muted); font-size: 12px; cursor: pointer; }
+    .community-filter[aria-pressed="true"] { border-bottom-color: var(--accent); color: var(--ink); }
+    .community-count { flex: none; color: var(--muted); font-size: 11px; }
+    .community-feed { display: grid; gap: 18px; }
+    .community-card { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); border: 1px solid var(--line); background: #202a25; }
+    .community-photo { min-height: 250px; background: #2b3530; }
+    .community-photo img { display: block; width: 100%; height: 100%; min-height: 250px; object-fit: cover; }
+    .community-body { min-width: 0; padding: 20px 22px 18px; }
+    .community-author { display: flex; align-items: center; gap: 10px; }
+    .community-author-mark { width: 32px; height: 32px; flex: none; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; color: var(--green); font: 14px var(--serif); }
+    .community-author-name { font-size: 12px; font-weight: 600; }
+    .community-post-meta { margin-top: 3px; color: var(--muted); font-size: 10px; }
+    .community-post-title { margin: 17px 0 8px; font: 500 21px/1.5 var(--serif); }
+    .community-description { margin: 0; color: #565951; font-size: 12px; line-height: 1.9; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .community-place { margin: 10px 0 17px; color: var(--green); font-size: 10px; }
+    .comments-title { border-top: 1px solid var(--line); padding-top: 13px; color: var(--muted); font-size: 10px; letter-spacing: .7px; }
+    .comment-list { display: grid; gap: 9px; margin: 10px 0 13px; }
+    .comment-item { color: #565951; font-size: 11px; line-height: 1.7; overflow-wrap: anywhere; }
+    .comment-author { margin-right: 7px; color: var(--ink); font-weight: 600; }
+    .comment-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 7px; align-items: end; }
+    .comment-input, .forum-input, .forum-select, .forum-textarea { width: 100%; border: 1px solid var(--line); border-radius: 2px; padding: 10px 11px; background: #242e29; color: var(--ink); font: 12px var(--sans); }
+    .comment-input { min-height: 38px; resize: vertical; }
+    .comment-submit, .login-to-comment { min-height: 38px; border: 1px solid var(--ink); border-radius: 2px; padding: 0 12px; background: var(--ink); color: var(--paper); font-size: 11px; cursor: pointer; }
+    .login-to-comment { border-color: var(--line); background: transparent; color: var(--ink); }
+    .community-empty { padding: 50px 18px; border: 1px dashed #c9c7be; color: var(--muted); text-align: center; font: 16px/1.9 var(--serif); }
+    .community-empty strong { display: block; color: var(--ink); font-size: 20px; font-weight: 500; }
+    .community-status { min-height: 18px; margin: 12px 0 0; color: var(--accent); font-size: 11px; }
+
+    .forum-dialog { width: min(440px, calc(100% - 30px)); max-height: min(90vh, 760px); overflow: auto; border: 1px solid var(--line); border-radius: 2px; padding: 0; background: var(--paper); color: var(--ink); box-shadow: 0 22px 80px rgb(0 0 0 / 28%); }
+    .forum-dialog::backdrop { background: rgb(20 22 20 / 64%); }
+    .forum-dialog-inner { padding: 25px 27px 28px; }
+    .dialog-heading { display: flex; justify-content: space-between; align-items: start; gap: 15px; margin-bottom: 20px; }
+    .dialog-heading h2 { margin: 0; font-size: 23px; }
+    .dialog-heading p { margin: 7px 0 0; color: var(--muted); font-size: 11px; }
+    .dialog-close { width: 30px; height: 30px; border: 1px solid var(--line); border-radius: 50%; background: transparent; cursor: pointer; font-size: 18px; }
+    .auth-modes { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--line); margin-bottom: 17px; }
+    .auth-mode { min-height: 39px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: var(--muted); cursor: pointer; }
+    .auth-mode[aria-selected="true"] { border-bottom-color: var(--accent); color: var(--ink); }
+    .forum-field { display: grid; gap: 7px; margin: 13px 0; color: var(--muted); font-size: 11px; }
+    .forum-input, .forum-select { min-height: 42px; font-size: 13px; }
+    .forum-textarea { min-height: 100px; resize: vertical; font-size: 13px; line-height: 1.7; }
+    .forum-help { margin: 5px 0 0; color: var(--muted); font-size: 10px; line-height: 1.7; }
+    .dialog-submit { width: 100%; min-height: 43px; margin-top: 11px; border: 0; border-radius: 2px; background: var(--ink); color: var(--paper); font-size: 12px; cursor: pointer; }
+    .dialog-submit:disabled, .comment-submit:disabled { opacity: .55; cursor: wait; }
+    .form-error { min-height: 17px; margin: 10px 0 0; color: var(--accent); font-size: 11px; }
+    .file-input { width: 100%; color: var(--muted); font: 11px var(--sans); }
+
+    .lightbox { position: fixed; z-index: 5; inset: 0; display: none; align-items: center; justify-content: center; padding: 38px; background: rgb(20 22 20 / 94%); color: #f4f2ec; }
+    .lightbox.open { display: flex; }
+    .lightbox-content { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 24px; align-items: end; width: min(1120px, 100%); max-height: 100%; animation: enter 220ms both; }
+    .lightbox-image { display: block; width: 100%; max-height: calc(100vh - 76px); object-fit: contain; }
+    .lightbox-details { padding-bottom: 5px; }
+    .lightbox-category { color: #d28a72; font-size: 10px; letter-spacing: 1.5px; }
+    .lightbox-title { margin: 10px 0; font: 500 22px var(--serif); }
+    .lightbox-place { color: #c0c1b9; font-size: 12px; line-height: 1.8; }
+    .lightbox-close, .lightbox-step { position: absolute; display: grid; place-items: center; width: 42px; height: 42px; border: 1px solid rgb(255 255 255 / 35%); border-radius: 50%; background: transparent; color: white; font-size: 22px; cursor: pointer; }
+    .lightbox-close { top: 22px; right: 25px; }
+    .lightbox-step { top: 50%; transform: translateY(-50%); font-size: 25px; }
+    .lightbox-prev { left: 22px; }
+    .lightbox-next { right: 22px; }
+    .lightbox-close:hover, .lightbox-step:hover { background: white; color: var(--ink); }
+
+    @keyframes enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+    @media (max-width: 800px) {
+      .page-shell { width: min(100% - 48px, 680px); }
+      .hero { grid-template-columns: 1fr 1fr; gap: 5%; padding: 45px 0 55px; }
+      h1 { font-size: clamp(55px, 10vw, 78px); }
+      .hero-image { height: 390px; }
+      .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 16px; }
+      .lightbox-content { grid-template-columns: 1fr; gap: 14px; align-items: center; }
+      .lightbox-details { text-align: center; }
+      .lightbox-image { max-height: calc(100vh - 165px); }
+      .lightbox-step { top: auto; bottom: 25px; transform: none; }
+      .lightbox-prev { left: calc(50% - 53px); }
+      .lightbox-next { right: calc(50% - 53px); }
+      .community-card { grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); }
+      .community-body { padding: 17px; }
+    }
+    @media (max-width: 560px) {
+      .page-shell { width: calc(100% - 36px); }
+      .topbar { height: 68px; }
+      .top-note { display: none; }
+      .top-actions { gap: 11px; }
+      .top-link, .auth-trigger, .logout-button { font-size: 10px; }
+      .account-view { gap: 6px; }
+      .account-avatar { width: 25px; height: 25px; }
+      .account-name { max-width: 55px; }
+      .hero { grid-template-columns: 1fr; gap: 26px; padding: 39px 0 47px; }
+      .hero-copy { padding: 0; }
+      h1 { margin-top: 17px; font-size: 66px; }
+      .hero-description { margin: 12px 0 18px; }
+      .hero-image { height: 62vw; min-height: 250px; max-height: 355px; }
+      .gallery-section { padding: 32px 0 58px; }
+      .section-head { align-items: end; }
+      h2 { font-size: 24px; }
+      .filters { gap: 3px; margin-right: -8px; margin-left: -8px; }
+      .filter-button { padding: 0 11px; }
+      .gallery { gap: 25px 11px; }
+      .photo-info { display: block; padding-top: 9px; }
+      .photo-category { display: block; padding-top: 4px; }
+      .photo-title { font-size: 14px; }
+      .photo-place { font-size: 10px; }
+      .photo-number { left: 7px; top: 7px; font-size: 9px; }
+      .footer { font-size: 9px; }
+      .community-section { padding: 39px 0 55px; }
+      .community-heading { align-items: start; }
+      .community-heading h2 { font-size: 27px; }
+      .community-heading p { max-width: 250px; }
+      .publish-button { min-height: 38px; padding: 0 11px; font-size: 10px; }
+      .community-toolbar { align-items: start; }
+      .community-filters { gap: 0; }
+      .community-filter { padding: 0 8px; font-size: 10px; }
+      .community-count { padding-top: 12px; font-size: 9px; }
+      .community-card { grid-template-columns: minmax(0, 1fr); }
+      .community-photo, .community-photo img { min-height: 0; aspect-ratio: 4 / 3; }
+      .community-body { padding: 15px; }
+      .community-post-title { margin-top: 13px; font-size: 19px; }
+      .forum-dialog-inner { padding: 22px 19px 23px; }
+      .lightbox { padding: 20px 14px 80px; }
+      .lightbox-close { top: 13px; right: 13px; }
+      .lightbox-image { max-height: calc(100vh - 190px); }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar page-shell">
+    <a class="wordmark" href="#top" aria-label="时痕首页"><span class="wordmark-symbol" aria-hidden="true">时</span><span class="wordmark-name">时痕</span></a>
+    <span class="top-note">光阴有迹 · 镜头有声</span>
+    <div class="top-actions">
+      <a class="top-link" href="#community">摄影交流 <span aria-hidden="true">&#8599;</span></a>
+      <button class="auth-trigger" id="auth-trigger" type="button">登录 / 注册</button>
+      <div class="account-view" id="account-view" hidden>
+        <span class="account-avatar" id="account-avatar" aria-hidden="true"></span>
+        <span class="account-name" id="account-name"></span>
+        <button class="logout-button" id="logout-button" type="button">退出</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="page-shell">
+    <section class="hero" aria-labelledby="site-title">
+      <div class="hero-copy">
+        <div class="eyebrow">A PHOTOGRAPHY JOURNAL</div>
+        <h1 id="site-title">时痕</h1>
+        <p class="hero-subtitle">光落下的地方，<br>时间有了形状。</p>
+        <p class="hero-description">在山海之间，在人群之中，也在抬头的一瞬。把那些稍纵即逝的光，认真留在这里。</p>
+        <div class="hero-meta"><span>独立摄影作品集</span><span class="meta-dot" aria-hidden="true"></span><span>持续更新</span></div>
+      </div>
+      <div class="hero-image-wrap">
+        <img class="hero-image" src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1500&q=85" alt="群山、森林与湖泊在晨光中倒映" fetchpriority="high">
+        <span class="image-caption">山野手记 · 01</span>
+        <span class="image-index">光影档案 / 2024—26</span>
+      </div>
+    </section>
+
+    <section class="gallery-section" id="gallery" aria-labelledby="gallery-title">
+      <div class="section-head">
+        <div><p class="section-kicker">SELECTED FRAMES</p><h2 id="gallery-title">镜头里的片刻</h2></div>
+        <span class="photo-count" id="photo-count" aria-live="polite">共 8 张作品</span>
+      </div>
+      <div class="filters" role="group" aria-label="按照片类别筛选">
+        <button class="filter-button" type="button" data-filter="全部" aria-pressed="true">全部</button>
+        <button class="filter-button" type="button" data-filter="风景" aria-pressed="false">风景</button>
+        <button class="filter-button" type="button" data-filter="人文" aria-pressed="false">人文</button>
+        <button class="filter-button" type="button" data-filter="星空" aria-pressed="false">星空</button>
+        <button class="filter-button" type="button" data-filter="日常" aria-pressed="false">日常</button>
+      </div>
+
+      <div class="gallery" id="photo-gallery">
+        <article class="photo-card" tabindex="0" role="button" data-category="风景" data-title="湖山之间" data-place="瑞士 · 蓝湖 · 清晨 06:18">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=900&q=80" alt="宁静湖面映出层叠的山峦" loading="lazy"><span class="photo-number">01 / 08</span></div>
+          <div class="photo-info"><h3 class="photo-title">湖山之间</h3><span class="photo-category">风景 · 2025</span></div><p class="photo-place">瑞士 · 蓝湖</p>
+        </article>
+        <article class="photo-card" tabindex="0" role="button" data-category="人文" data-title="午后的街角" data-place="中国 · 成都 · 午后 15:42">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=900&q=80" alt="暮色中城市街区亮起温暖灯光" loading="lazy"><span class="photo-number">02 / 08</span></div>
+          <div class="photo-info"><h3 class="photo-title">午后的街角</h3><span class="photo-category">人文 · 2025</span></div><p class="photo-place">中国 · 成都</p>
+        </article>
+        <article class="photo-card" tabindex="0" role="button" data-category="星空" data-title="星河来信" data-place="中国 · 青海 · 凌晨 02:16">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=900&q=80" alt="雪峰之上繁星与银河清晰可见" loading="lazy"><span class="photo-number">03 / 08</span></div>
+          <div class="photo-info"><h3 class="photo-title">星河来信</h3><span class="photo-category">星空 · 2024</span></div><p class="photo-place">中国 · 青海</p>
+        </article>
+        <article class="photo-card" tabindex="0" role="button" data-category="风景" data-title="风经过旷野" data-place="中国 · 新疆 · 日落 19:03">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80" alt="辽阔的荒野与远方山脉沐浴在金色光线中" loading="lazy"><span class="photo-number">04 / 08</span></div>
+          <div class="photo-info"><h3 class="photo-title">风经过旷野</h3><span class="photo-category">风景 · 2025</span></div><p class="photo-place">中国 · 新疆</p>
+        </article>
+        <article class="photo-card" tabindex="0" role="button" data-category="人文" data-title="凝望此刻" data-place="日本 · 京都 · 上午 10:27">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=80" alt="一位女性在自然光下的肖像" loading="lazy"><span class="photo-number">05 / 08</span></div>
+          <div class="photo-info"><h3 class="photo-title">凝望此刻</h3><span class="photo-category">人文 · 2024</span></div><p class="photo-place">日本 · 京都</p>
+        </article>
+        <article class="photo-card" tabindex="0" role="button" data-category="星空" data-title="夜色未眠" data-place="智利 · 阿塔卡马 · 凌晨 01:08">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?auto=format&fit=crop&w=900&q=80" alt="深邃宇宙中的星云与繁星" loading="lazy"><span class="photo-number">06 / 08</span></div>
+          <div class="photo-info"><h3 class="photo-title">夜色未眠</h3><span class="photo-category">星空 · 2024</span></div><p class="photo-place">智利 · 阿塔卡马</p>
+        </article>
+        <article class="photo-card" tabindex="0" role="button" data-category="风景" data-title="雾起时分" data-place="中国 · 黄山 · 清晨 05:51">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=900&q=80" alt="晨光穿过山间薄雾与树林" loading="lazy"><span class="photo-number">07 / 08</span></div>
+          <div class="photo-info"><h3 class="photo-title">雾起时分</h3><span class="photo-category">风景 · 2026</span></div><p class="photo-place">中国 · 黄山</p>
+        </article>
+        <article class="photo-card" tabindex="0" role="button" data-category="日常" data-title="一束窗边的光" data-place="中国 · 家中 · 上午 09:12">
+          <div class="photo-frame"><img src="https://images.unsplash.com/photo-1490750967868-88aa4486c946?auto=format&fit=crop&w=900&q=80" alt="窗边盛放的花朵与柔和日光" loading="lazy"><span class="photo-number">08 / 08</span></div>
+          <div class="photo-info"><h3 class="photo-title">一束窗边的光</h3><span class="photo-category">日常 · 2026</span></div><p class="photo-place">中国 · 家中</p>
+        </article>
+      </div>
+      <p class="empty-state" id="empty-state">这一类的故事，还在路上。</p>
+    </section>
+
+    <section class="community-section" id="community" aria-labelledby="community-title">
+      <div class="community-heading">
+        <div>
+          <p class="section-kicker">THE PHOTOGRAPHY COMMUNITY</p>
+          <h2 id="community-title">一起看见更多</h2>
+          <p>分享你的作品、拍摄心得与现场故事。在彼此的观察里，找到下一次进步的方向。</p>
+        </div>
+        <button class="publish-button" id="publish-trigger" type="button">＋ 发布作品</button>
+      </div>
+      <div class="community-toolbar">
+        <div class="community-filters" role="group" aria-label="筛选社区作品">
+          <button class="community-filter" type="button" data-community-filter="全部" aria-pressed="true">最新</button>
+          <button class="community-filter" type="button" data-community-filter="风景" aria-pressed="false">风景</button>
+          <button class="community-filter" type="button" data-community-filter="人文" aria-pressed="false">人文</button>
+          <button class="community-filter" type="button" data-community-filter="星空" aria-pressed="false">星空</button>
+          <button class="community-filter" type="button" data-community-filter="日常" aria-pressed="false">日常</button>
+          <button class="community-filter" type="button" data-community-filter="器材与技巧" aria-pressed="false">技巧</button>
+        </div>
+        <span class="community-count" id="community-count" aria-live="polite">正在载入</span>
+      </div>
+      <div class="community-feed" id="community-feed" aria-live="polite"></div>
+      <p class="community-status" id="community-status" role="status"></p>
+    </section>
+  </main>
+
+  <footer class="footer page-shell"><span>时痕 · 用镜头留住时间</span><span>© 2026 摄影作品集</span></footer>
+
+  <dialog class="forum-dialog" id="auth-dialog" aria-labelledby="auth-title">
+    <div class="forum-dialog-inner">
+      <div class="dialog-heading">
+        <div><h2 id="auth-title">加入时痕</h2><p>和更多摄影爱好者，一起记录与交流。</p></div>
+        <button class="dialog-close" type="button" data-close-dialog="auth-dialog" aria-label="关闭">&times;</button>
+      </div>
+      <div class="auth-modes" role="tablist" aria-label="账号操作">
+        <button class="auth-mode" type="button" data-auth-mode="login" role="tab" aria-selected="true">登录</button>
+        <button class="auth-mode" type="button" data-auth-mode="register" role="tab" aria-selected="false">注册新账号</button>
+      </div>
+      <form id="auth-form">
+        <label class="forum-field">昵称<input class="forum-input" name="name" autocomplete="username" minlength="2" maxlength="24" required></label>
+        <label class="forum-field">密码<input class="forum-input" name="password" type="password" autocomplete="current-password" minlength="8" maxlength="128" required></label>
+        <p class="forum-help" id="auth-help">密码至少 8 个字符。服务端只保存密码哈希。</p>
+        <p class="form-error" id="auth-error" role="alert"></p>
+        <button class="dialog-submit" type="submit">登录</button>
+      </form>
+    </div>
+  </dialog>
+
+  <dialog class="forum-dialog" id="publish-dialog" aria-labelledby="publish-title">
+    <div class="forum-dialog-inner">
+      <div class="dialog-heading">
+        <div><h2 id="publish-title">发布一张作品</h2><p>一张照片，一段观察，也可以是一道问题。</p></div>
+        <button class="dialog-close" type="button" data-close-dialog="publish-dialog" aria-label="关闭">&times;</button>
+      </div>
+      <form id="publish-form">
+        <label class="forum-field">作品标题<input class="forum-input" name="title" maxlength="100" required></label>
+        <label class="forum-field">作品类别<select class="forum-select" name="category" required><option value="风景">风景</option><option value="人文">人文</option><option value="星空">星空</option><option value="日常">日常</option><option value="器材与技巧">器材与技巧</option></select></label>
+        <label class="forum-field">拍摄地点 <span class="forum-help">选填</span><input class="forum-input" name="place" maxlength="100" placeholder="例如：青海 · 茶卡盐湖"></label>
+        <label class="forum-field">照片<input class="file-input" name="image" type="file" accept="image/jpeg,image/png,image/webp" required><span class="forum-help">支持 JPG、PNG、WebP，单张不超过 10 MB。</span></label>
+        <label class="forum-field">拍摄心得 / 想交流的问题<textarea class="forum-textarea" name="description" maxlength="2000" placeholder="记录当时的光线、参数，或你想听听大家意见的地方"></textarea></label>
+        <p class="form-error" id="publish-error" role="alert"></p>
+        <button class="dialog-submit" type="submit">发布到交流区</button>
+      </form>
+    </div>
+  </dialog>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="照片详情">
+    <button class="lightbox-close" type="button" aria-label="关闭照片详情">&times;</button>
+    <button class="lightbox-step lightbox-prev" type="button" aria-label="上一张">&#8592;</button>
+    <div class="lightbox-content">
+      <img class="lightbox-image" src="" alt="">
+      <div class="lightbox-details"><span class="lightbox-category"></span><h2 class="lightbox-title"></h2><div class="lightbox-place"></div></div>
+    </div>
+    <button class="lightbox-step lightbox-next" type="button" aria-label="下一张">&#8594;</button>
+  </div>
+
+  <script>
+    const cards = [...document.querySelectorAll('.photo-card')];
+    const filterButtons = [...document.querySelectorAll('.filter-button')];
+    const photoCount = document.querySelector('#photo-count');
+    const emptyState = document.querySelector('#empty-state');
+    const lightbox = document.querySelector('#lightbox');
+    const lightboxImage = document.querySelector('.lightbox-image');
+    const lightboxCategory = document.querySelector('.lightbox-category');
+    const lightboxTitle = document.querySelector('.lightbox-title');
+    const lightboxPlace = document.querySelector('.lightbox-place');
+    let activePhotos = cards;
+    let activeIndex = 0;
+    let previouslyFocused = null;
+
+    function setFilter(category) {
+      filterButtons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.filter === category)));
+      activePhotos = cards.filter((card) => category === '全部' || card.dataset.category === category);
+      cards.forEach((card) => { card.hidden = !activePhotos.includes(card); });
+      photoCount.textContent = `共 ${activePhotos.length} 张作品`;
+      emptyState.classList.toggle('visible', activePhotos.length === 0);
+    }
+
+    function showPhoto(index) {
+      activeIndex = (index + activePhotos.length) % activePhotos.length;
+      const card = activePhotos[activeIndex];
+      const image = card.querySelector('img');
+      lightboxImage.src = image.src.replace(/w=900/, 'w=1800');
+      lightboxImage.alt = image.alt;
+      lightboxCategory.textContent = `${card.dataset.category} · ${card.querySelector('.photo-category').textContent.split('·').pop().trim()}`;
+      lightboxTitle.textContent = card.dataset.title;
+      lightboxPlace.textContent = card.dataset.place;
+    }
+
+    function openLightbox(card) {
+      previouslyFocused = document.activeElement;
+      showPhoto(activePhotos.indexOf(card));
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      lightbox.querySelector('.lightbox-close').focus();
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+      previouslyFocused?.focus();
+    }
+
+    filterButtons.forEach((button) => button.addEventListener('click', () => setFilter(button.dataset.filter)));
+    cards.forEach((card) => {
+      card.addEventListener('click', () => openLightbox(card));
+      card.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openLightbox(card); }
+      });
+    });
+    lightbox.querySelector('.lightbox-close').addEventListener('click', closeLightbox);
+    lightbox.querySelector('.lightbox-prev').addEventListener('click', () => showPhoto(activeIndex - 1));
+    lightbox.querySelector('.lightbox-next').addEventListener('click', () => showPhoto(activeIndex + 1));
+    lightbox.addEventListener('click', (event) => { if (event.target === lightbox) closeLightbox(); });
+    document.addEventListener('keydown', (event) => {
+      if (!lightbox.classList.contains('open')) return;
+      if (event.key === 'Escape') closeLightbox();
+      if (event.key === 'ArrowLeft') showPhoto(activeIndex - 1);
+      if (event.key === 'ArrowRight') showPhoto(activeIndex + 1);
+    });
+
+    const authDialog = document.querySelector('#auth-dialog');
+    const publishDialog = document.querySelector('#publish-dialog');
+    const authForm = document.querySelector('#auth-form');
+    const publishForm = document.querySelector('#publish-form');
+    const authError = document.querySelector('#auth-error');
+    const publishError = document.querySelector('#publish-error');
+    const authTrigger = document.querySelector('#auth-trigger');
+    const accountView = document.querySelector('#account-view');
+    const communityFeed = document.querySelector('#community-feed');
+    const communityCount = document.querySelector('#community-count');
+    const communityStatus = document.querySelector('#community-status');
+    const communityFilters = [...document.querySelectorAll('.community-filter')];
+    let currentUser = null;
+    let currentCommunityCategory = '全部';
+    let authMode = 'login';
+    let publishAfterLogin = false;
+
+    async function requestApi(path, options = {}) {
+      const response = await fetch(path, { credentials: 'same-origin', ...options });
+      const text = await response.text();
+      let data = {};
+      if (text) {
+        try { data = JSON.parse(text); } catch { data = {}; }
+      }
+      if (!response.ok) throw new Error(data.error || `请求失败（${response.status}）`);
+      return data;
+    }
+
+    function makeTextElement(tagName, className, text) {
+      const element = document.createElement(tagName);
+      element.className = className;
+      element.textContent = text;
+      return element;
+    }
+
+    function formatPostDate(value) {
+      return new Intl.DateTimeFormat('zh-CN', { month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(value));
+    }
+
+    function setAccount(user) {
+      currentUser = user;
+      authTrigger.hidden = Boolean(user);
+      accountView.hidden = !user;
+      if (user) {
+        document.querySelector('#account-name').textContent = user.name;
+        document.querySelector('#account-avatar').textContent = Array.from(user.name)[0] || '影';
+      }
+    }
+
+    function showAuth(mode = 'login') {
+      setAuthMode(mode);
+      authError.textContent = '';
+      authDialog.showModal();
+    }
+
+    function setAuthMode(mode) {
+      authMode = mode;
+      document.querySelectorAll('.auth-mode').forEach((button) => {
+        button.setAttribute('aria-selected', String(button.dataset.authMode === mode));
+      });
+      const passwordInput = authForm.elements.password;
+      passwordInput.autocomplete = mode === 'register' ? 'new-password' : 'current-password';
+      document.querySelector('#auth-help').textContent = mode === 'register' ? '密码至少 8 个字符，请妥善保管。' : '登录后即可发布作品、参与交流。';
+      authForm.querySelector('.dialog-submit').textContent = mode === 'register' ? '创建账号' : '登录';
+    }
+
+    function showCommunityEmpty() {
+      const empty = document.createElement('div');
+      empty.className = 'community-empty';
+      const title = makeTextElement('strong', '', currentUser ? '这里还没有新作品' : '社区的第一张照片，等你来发布');
+      const detail = makeTextElement('span', '', currentUser ? '分享一张作品，开启一次新的交流。' : '注册账号后，上传作品并和大家聊聊拍摄心得。');
+      empty.append(title, detail);
+      communityFeed.replaceChildren(empty);
+    }
+
+    function renderCommunityPost(post) {
+      const card = document.createElement('article');
+      card.className = 'community-card';
+      const photo = document.createElement('div');
+      photo.className = 'community-photo';
+      const image = document.createElement('img');
+      image.src = post.imageUrl;
+      image.alt = post.title;
+      image.loading = 'lazy';
+      photo.append(image);
+
+      const body = document.createElement('div');
+      body.className = 'community-body';
+      const author = document.createElement('div');
+      author.className = 'community-author';
+      author.append(makeTextElement('span', 'community-author-mark', Array.from(post.author)[0] || '影'));
+      const authorText = document.createElement('div');
+      authorText.append(
+        makeTextElement('div', 'community-author-name', post.author),
+        makeTextElement('div', 'community-post-meta', `${post.category} · ${formatPostDate(post.createdAt)}`)
+      );
+      author.append(authorText);
+      body.append(author, makeTextElement('h3', 'community-post-title', post.title));
+      if (post.description) body.append(makeTextElement('p', 'community-description', post.description));
+      if (post.place) body.append(makeTextElement('p', 'community-place', post.place));
+      body.append(makeTextElement('div', 'comments-title', `交流与点评 · ${post.comments.length}`));
+
+      const comments = document.createElement('div');
+      comments.className = 'comment-list';
+      if (post.comments.length) {
+        post.comments.forEach((comment) => {
+          const item = document.createElement('div');
+          item.className = 'comment-item';
+          item.append(makeTextElement('span', 'comment-author', comment.author), document.createTextNode(comment.body));
+          comments.append(item);
+        });
+      } else {
+        comments.append(makeTextElement('div', 'comment-item', '还没有评论，来写第一条。'));
+      }
+      body.append(comments);
+
+      if (currentUser) {
+        const form = document.createElement('form');
+        form.className = 'comment-form';
+        const input = document.createElement('textarea');
+        input.className = 'comment-input';
+        input.name = 'body';
+        input.rows = 1;
+        input.maxLength = 1000;
+        input.placeholder = '说说你的观察…';
+        input.required = true;
+        input.setAttribute('aria-label', `评论作品：${post.title}`);
+        const submit = makeTextElement('button', 'comment-submit', '评论');
+        submit.type = 'submit';
+        form.append(input, submit);
+        form.addEventListener('submit', async (event) => {
+          event.preventDefault();
+          submit.disabled = true;
+          try {
+            await requestApi(`/api/posts/${encodeURIComponent(post.id)}/comments`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ body: input.value })
+            });
+            communityStatus.textContent = '评论已发布。';
+            await loadCommunity();
+          } catch (error) {
+            communityStatus.textContent = error.message;
+          } finally {
+            submit.disabled = false;
+          }
+        });
+        body.append(form);
+      } else {
+        const loginButton = makeTextElement('button', 'login-to-comment', '登录后参与评论');
+        loginButton.type = 'button';
+        loginButton.addEventListener('click', () => showAuth('login'));
+        body.append(loginButton);
+      }
+
+      card.append(photo, body);
+      return card;
+    }
+
+    async function loadCommunity(category = currentCommunityCategory) {
+      currentCommunityCategory = category;
+      communityFilters.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.communityFilter === category)));
+      communityCount.textContent = '正在载入';
+      try {
+        const query = category === '全部' ? '' : `?category=${encodeURIComponent(category)}`;
+        const posts = await requestApi(`/api/posts${query}`);
+        communityCount.textContent = `${posts.length} 篇作品`;
+        communityStatus.textContent = '';
+        if (!posts.length) {
+          showCommunityEmpty();
+          return;
+        }
+        communityFeed.replaceChildren(...posts.map(renderCommunityPost));
+      } catch (error) {
+        communityCount.textContent = '';
+        communityStatus.textContent = `暂时无法连接交流区：${error.message}`;
+        showCommunityEmpty();
+      }
+    }
+
+    document.querySelectorAll('[data-close-dialog]').forEach((button) => {
+      button.addEventListener('click', () => document.querySelector(`#${button.dataset.closeDialog}`).close());
+    });
+    document.querySelectorAll('.auth-mode').forEach((button) => button.addEventListener('click', () => setAuthMode(button.dataset.authMode)));
+    authTrigger.addEventListener('click', () => showAuth('login'));
+    document.querySelector('#logout-button').addEventListener('click', async () => {
+      try {
+        await requestApi('/api/logout', { method: 'POST' });
+        setAccount(null);
+        communityStatus.textContent = '已退出登录。';
+        await loadCommunity();
+      } catch (error) {
+        communityStatus.textContent = error.message;
+      }
+    });
+    authForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const submit = authForm.querySelector('.dialog-submit');
+      const formData = new FormData(authForm);
+      submit.disabled = true;
+      authError.textContent = '';
+      try {
+        const result = await requestApi(`/api/${authMode === 'register' ? 'register' : 'login'}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: formData.get('name'), password: formData.get('password') })
+        });
+        setAccount(result.user);
+        authDialog.close();
+        await loadCommunity();
+        if (publishAfterLogin) {
+          publishAfterLogin = false;
+          publishDialog.showModal();
+        }
+      } catch (error) {
+        authError.textContent = error.message;
+      } finally {
+        submit.disabled = false;
+      }
+    });
+    document.querySelector('#publish-trigger').addEventListener('click', () => {
+      if (!currentUser) {
+        publishAfterLogin = true;
+        showAuth('register');
+        return;
+      }
+      publishError.textContent = '';
+      publishDialog.showModal();
+    });
+    publishForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const submit = publishForm.querySelector('.dialog-submit');
+      const image = publishForm.elements.image.files[0];
+      if (image && image.size > 10 * 1024 * 1024) {
+        publishError.textContent = '照片不能超过 10 MB。';
+        return;
+      }
+      submit.disabled = true;
+      publishError.textContent = '';
+      try {
+        await requestApi('/api/posts', { method: 'POST', body: new FormData(publishForm) });
+        publishForm.reset();
+        publishDialog.close();
+        communityStatus.textContent = '作品已发布，期待大家的交流。';
+        currentCommunityCategory = '全部';
+        await loadCommunity();
+      } catch (error) {
+        publishError.textContent = error.message;
+      } finally {
+        submit.disabled = false;
+      }
+    });
+    communityFilters.forEach((button) => button.addEventListener('click', () => loadCommunity(button.dataset.communityFilter)));
+    requestApi('/api/me')
+      .then((result) => { setAccount(result.user); return loadCommunity(); })
+      .catch((error) => {
+        communityCount.textContent = '';
+        communityStatus.textContent = `论坛服务尚未启动：${error.message}`;
+        showCommunityEmpty();
+      });
+  </script>
+</body>
+</html>
